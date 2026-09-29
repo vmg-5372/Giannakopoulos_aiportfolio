@@ -1,0 +1,31 @@
+"AI Scenario"
+
+1.) What are the features?
+  Amount
+  Time
+  V1-V28
+2.) What is the label?
+  Fraud and non-fraud transactions (Class)
+3.) What would training data contain?
+  The training date would contain the features amount, time, and V1-V28, and also the label class.
+4.) Why should testing data be kept separate?
+  The testing data should be kept separate because the data collected should remain unused by the training AI so the transactions are new data.
+5.) What could be a false positive?
+  A false positive could be a legitimate transaction flagged as fraud. 
+6.) What could be a false negative?
+  A false negative could be an illegitimate transaction flagged as correct.
+7.) Would precision or recall be more important?
+  Both precision and recall are important. Recall would be finding as many fraudulent transactions that can be found, and precision is when customers’ real transactions aren’t flagged wrongly. They are both important for creating a balanced system.
+8.) What types of poor-quality data could affect this model?
+  Wrong values imputed
+  Wrong transaction amounts / dates
+  Data entered incorrectly
+  Fraudulent activity imputed wrong, or not enough activity to build a foundation
+9.) What could cause this model to overfit?
+  Too many sample transactions
+  Too long of training
+  Not enough data
+10.) What would make you trust—or not trust—the model's predictions?
+  No data leakage
+  Trained on enough materials to learn the correct patterns of identification
+  Can correctly identify fraud v non-fraud consistently
