@@ -1,0 +1,103 @@
+Fraud Detection
+
+https://www.kaggle.com/code/janiobachmann/credit-fraud-dealing-with-imbalanced-datasets/notebook
+
+Part 1- 
+	What is the business problem?
+
+The business problem within this fraud detection notebook is the detection of fraud correctly, while also making sure non-fraud transactions aren’t incorrectly flagged. With how many transactions are made within credit card companies, and only a few of those being fraudulent, it is difficult to weed them out. An AI system in place could be able to accurately find those transactions, and separate them from the rest so it is more productive for the business. It would also greatly reduce the incorrectly flagged transactions. 
+
+Why is this problem important to the organization?
+
+This problem is important to the organization because reducing the amount of non-fraud transactions being flagged will increase productivity, and real frauds being detected will help their business grow. Workers don’t have to focus on finding fraudulent transactions, which is very tedious, and can focus on other work to be done. Fraud also causes big financial losses for all parties involved. It will protect customers from mistakenly being flagged, and from fraudulent activity. 
+Who is affected by this problem?
+Those affected by this problem are the business owners, those committing fraud, and those having fraud committed to them.
+
+Part 2-
+	What data would you need?
+
+The AI system would need the transaction amounts, where transactions are made, customer purchases and activity, fraud records and past fraud and non-fraud transactions.
+
+Where could the data come from?
+
+The data could come from the bank database, records of past fraud, and the transactions database.
+	
+  How much historical data might be useful?
+
+All historical data would be useful in training the AI so it clearly understands what is fraud and what isn’t. 
+	
+  What would be the most important variables?
+
+The transactions and amounts.
+	
+  What could be missing or inaccurate?
+
+Information in the transaction records could be wrong or missing, or wrong fraud detections.
+
+Part 3- 
+
+  What information would you give the model?
+1.) Transaction amounts
+2.) Fraud findings
+3.) Time and date of transactions
+4.) Number of fraudulent and correct transactions
+5.) Differences between a good/bad transaction
+
+Part 4- 
+
+  Would you use supervised or unsupervised learning?
+
+Supervised Learning
+
+  Explain your choice.
+
+I would choose supervised learning because AI isn’t 100% foolproof, especially when just putting in the system. AI could mix up which transactions are which, and having a human to double check the work would help make it much more accurate. The AI system also has past information which can help with its accuracy. Having a human presence will make the AI stronger at what it’s supposed to do.
+Would the problem involve classification or prediction?
+
+  Choose:
+
+Classification
+
+  Explain your choice.
+
+This problem involves classification. This is because the AI is supposed to put the transactions into categories. The categories are fraud transactions or credible transactions. It needs to look at the information being given to it, and sort it into whichever categories it was given. 
+
+Part 5-
+
+  Identify three possible data-quality problems.
+1.) Information missing
+2.) Wrong values given (amounts, times, etc.)
+3.) Unbalanced data
+ 
+  What could happen if the data is poor?	
+
+If the data is poor, the AI can learn that date and think it’s correct. If that happens, the AI may begin to say fraud data is good, and the credible transactions are the fraudulent ones. This will harm the business by losing money, customers, and making all their data unorganized. The business would have to completely rework their system if this were to happen.
+
+Part 6- 
+
+  Business Problem
+
+A bank wants to identify credit card frauds easier when dealing with many transactions.
+
+  Data Needed
+
+1.) Transaction amounts
+2.) Transaction dates
+3.) Credit card database
+4.) Fraud findings
+  
+  Type of Learning
+
+Supervised learning because the data has past history of transactions.
+
+  Model Output
+
+Fraud or not fraud
+
+  Business Benefit
+
+The business can identify fraud faster, and weed it out of many credit card transactions accurately,
+
+  Potential Risk
+
+The AI system could use wrong information, or mistake a correct transaction for fraud and vice versa.
