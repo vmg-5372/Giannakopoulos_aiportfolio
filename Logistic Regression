@@ -1,0 +1,205 @@
+from google.colab import drive
+
+drive.mount('/content/drive')
+
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    classification_report
+)
+
+file_path = "/content/drive/My Drive/datasets/framingham.csv"
+
+df = pd.read_csv(file_path)
+
+print("Framingham dataset loaded successfully!")
+print("Number of rows:", len(df))
+print("Number of columns:", len(df.columns))
+
+file_path = "/content/drive/My Drive/datasets/framingham.csv"
+
+df = pd.read_csv(file_path)
+
+print("Dataset loaded successfully!")
+print("Number of rows:", len(df))
+print("Number of columns:", len(df.columns))
+
+print(df.head())
+
+print(df.columns)
+
+print(df.info())
+
+print(df.describe())
+
+features = [
+    'male',
+    'age',
+    'education',
+    'currentSmoker',
+    'cigsPerDay',
+    'BPMeds',
+    'prevalentStroke',
+    'prevalentHyp',
+    'diabetes',
+]
+
+X = df[features]
+y = df["TenYearCHD"]
+
+print("Features (X) for Framingham:")
+print(X.head())
+
+print("\nTarget (y) for Framingham:")
+print(y.head())
+
+from google.colab import drive
+
+drive.mount('/content/drive')
+
+features = [
+    "male",
+    "age",
+    "education",
+    "currentSmoker",
+    "cigsPerDay",
+    "BPMeds",
+    "prevalentStroke",
+    "prevalentHyp",
+    "diabetes",
+    "totChol",
+    "sysBP",
+    "diaBP",
+    "BMI",
+    "heartRate",
+    "glucose"
+
+]
+
+X = df[features]
+
+y = df["TenYearCHD"]
+
+print("Features:")
+print(X.head())
+
+print("\nTarget:")
+print(y.head())
+
+print(X.isnull().sum())
+
+X = X.copy() # Ensure we're working on a copy to avoid SettingWithCopyWarning
+
+# Impute missing values with the median for relevant columns
+X["education"] = X["education"].fillna(X["education"].median())
+X["cigsPerDay"] = X["cigsPerDay"].fillna(X["cigsPerDay"].median())
+X["BPMeds"] = X["BPMeds"].fillna(X["BPMeds"].median())
+X["totChol"] = X["totChol"].fillna(X["totChol"].median())
+X["BMI"] = X["BMI"].fillna(X["BMI"].median())
+X["heartRate"] = X["heartRate"].fillna(X["heartRate"].median())
+X["glucose"] = X["glucose"].fillna(X["glucose"].median())
+
+print("Missing values after cleaning:")
+print(X.isnull().sum())
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42
+)
+
+print("Training data:", len(X_train))
+print("Testing data:", len(X_test))
+
+model = LogisticRegression(max_iter=1000)
+
+print(model)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Predictions:")
+print(y_pred[:20])
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+
+print("Accuracy percentage:", accuracy * 100, "%")
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("Confusion Matrix:")
+print(cm)
+
+print(classification_report(y_test, y_pred))
+
+probabilities = model.predict_proba(X_test)
+
+print(probabilities[:10])
+
+# Define a new passenger's features that match the model's training features
+new_passenger = pd.DataFrame({
+    "male": [1], # Assuming a male passenger
+    "age": [25.0],
+    "education": [2.0], # Median education
+    "currentSmoker": [0],
+    "cigsPerDay": [0.0], # Median cigsPerDay
+    "BPMeds": [0.0], # Median BPMeds
+    "prevalentStroke": [0],
+    "prevalentHyp": [0],
+    "diabetes": [0],
+    "totChol": [234.0], # Median totChol
+    "sysBP": [128.0], # Median sysBP
+    "diaBP": [82.0], # Median diaBP
+    "BMI": [25.40], # Median BMI
+    "heartRate": [75.0], # Median heartRate
+    "glucose": [78.0] # Median glucose
+})
+
+prediction = model.predict(new_passenger)
+
+probability = model.predict_proba(new_passenger)
+
+print("Prediction:", prediction)
+
+print("Probability of NOT developing CHD:",
+      probability[0][0])
+
+print("Probability of developing CHD:",
+      probability[0][1])
+
+if prediction[0] == 1:
+    print("The model predicts: SURVIVED")
+else:
+    print("The model predicts: DID NOT SURVIVE")
+
+coefficients = pd.DataFrame({
+    "Feature": features,
+    "Coefficient": model.coef_[0]
+})
+
+print(coefficients
+
+df["age"] = df["age"].fillna("Unknown")
+
+# Import libraries
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    precision_score,
+    recall_score,
+    f1_score
+)
