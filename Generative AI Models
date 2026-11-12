@@ -1,0 +1,143 @@
+ TEXT SUMMARIZATION
+!pip -q install transformers sentencepiece
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+
+# Load the model and tokenizer directly for seq2seq task
+model_name = "google/flan-t5-small"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+print("Model and tokenizer loaded successfully!")
+
+# A sample business report
+report = """
+The car business earned $55,600 in January.
+In January, sales decreased to $50,889.
+Customer orders decreased by 5 percent.
+However, customer's positive reviews increased.
+The company plans to improve advertising strategies
+and introduce a more effective way of getting products out.
+"""
+
+# Tell the model what to do
+prompt = "Summarize this business report and highlight the numbers: " + report
+
+# Tokenize inputs
+inputs = tokenizer(prompt, return_tensors="pt")
+
+# Generate the summary
+outputs = model.generate(
+    **inputs,
+    max_new_tokens=100,
+    do_sample=False
+)
+
+# Decode and print the result
+result = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print(result)
+
+The report shows the overall important point. It doesn't say everything, but it talks about the relevant numbers.
+
+TEXT GENERATION
+from transformers import pipeline
+
+# Load a pretrained text-generation model
+generator = pipeline(
+    "text-generation",
+    model="openai-community/gpt2"
+)
+
+print("GPT-2 loaded successfully!")
+
+prompt = "The walking robot helped the business"
+
+result = generator(
+    prompt,
+    max_new_tokens=60,
+    do_sample=True,
+    temperature=0.8,
+    top_k=50,
+    num_return_sequences=1,
+    pad_token_id=generator.tokenizer.eos_token_id
+)
+
+print(result[0]["generated_text"])
+
+prompt = "A robot can help the car industry by"
+
+result = generator(
+    prompt,
+    max_new_tokens=60,
+    do_sample=True,
+    temperature=0.8,
+    pad_token_id=generator.tokenizer.eos_token_id
+)
+
+print(result[0]["generated_text"])
+
+Both outputs have nonsensical parts to it, but the second prompt has a better answer overall as a product description. To get a very clear answer using this model, you'd have to give the AI more information.
+
+IMAGE GENERATION
+!pip -q install diffusers transformers accelerate safetensors
+
+import torch
+from diffusers import StableDiffusionPipeline
+from IPython.display import display
+
+# Use a GPU if available
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print("Running on:", device)
+
+# Load a pretrained text-to-image model
+model_id = "stable-diffusion-v1-5/stable-diffusion-v1-5"
+
+image_generator = StableDiffusionPipeline.from_pretrained(
+    model_id,
+    torch_dtype=torch.float16 if device == "cuda" else torch.float32
+)
+
+image_generator = image_generator.to(device)
+
+print("Image-generation model loaded!")
+
+prompt = """
+A small car in a workshop,
+people working on it, customer watching,
+realistic photography
+"""
+
+# Generate the image
+result = image_generator(
+    prompt=prompt,
+    num_inference_steps=25,
+    guidance_scale=7.5
+)
+
+# Display the generated image
+generated_image = result.images[0]
+display(generated_image)
+
+prompt = """
+A big human-like robot with arms that lift cars up to fix wheels,
+robot is dark grey, car is red
+realistic photography
+"""
+
+result = image_generator(
+    prompt=prompt,
+    num_inference_steps=25,
+    guidance_scale=7.5
+)
+
+display(result.images[0])
+
+The AI was able to somewhat get the design across with the limited information it was given. It doesn't understand exact things I said like the car being lifted up in the second prompt, or the people working in the first prompt.
+
+1. The text generation was the most useful output because it could at least give an idea for the product info.
+2. Changing the prompts, especially the stable diffusion model, changed the outputs completely. Putting in a different word for the text generation would switch what the AI came up with entirely, which shows the importance of being clear with your response.
+3. If you don't write something down correctly, the output could be completely different than what you need. 
+4. I would not because you would need a human to review all the mistakes the AI made. Humans would need to review the exact prompt put in, and change anything that didn't get produced as expected.
+
+Vasiliki Giannakopoulos 
+
+Overall, generative AI has lots of opportunity for creating and summarizing prompts with ease, but not reviewing or inputting things correctly could cauuse the outputs to be incorrect or not specified enough.
