@@ -1,0 +1,261 @@
+from google.colab import drive
+
+drive.mount('/content/drive')
+
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    classification_report
+)
+
+file_path = "/content/drive/My Drive/datasets/breast_cancer.csv"
+
+df = pd.read_csv(file_path)
+
+print("Dataset loaded successfully!")
+print("Number of rows:", len(df))
+print("Number of columns:", len(df.columns))
+
+print(df.head())
+
+print(df.info())
+
+print(df.describe())
+
+features = [
+    "Clump Thickness",
+    "Uniformity of Cell Size",
+    "Uniformity of Cell Shape",
+    "Marginal Adhesion",
+    "Single Epithelial Cell Size",
+    "Bare Nuclei",
+    "Bland Chromatin",
+    "Normal Nucleoli",
+    "Mitoses"
+]
+
+X = df[features]
+
+y = df["Class"]
+
+print("Features:")
+print(X.head())
+
+print("\nTarget:")
+print(y.head())
+
+print(X.isnull().sum())
+
+# The breast cancer dataset has no missing values in our features,
+# so we do not need to impute any missing values (like 'Age').
+
+X = X.copy()
+
+print("Missing values in each feature:")
+print(X.isnull().sum())
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42
+)
+
+print("Training data:", len(X_train))
+print("Testing data:", len(X_test))
+
+model = LogisticRegression(max_iter=1000)
+
+print(model)
+
+model.fit(X_train, y_train)
+
+print("Model training completed!")
+
+y_pred = model.predict(X_test)
+
+print("Predictions:")
+print(y_pred[:20])
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+
+print("Accuracy percentage:", accuracy * 100, "%")
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("Confusion Matrix:")
+print(cm)
+
+print(classification_report(y_test, y_pred))
+
+probabilities = model.predict_proba(X_test)
+
+print(probabilities[:10])
+
+# Define a new patient sample using the correct 9 features
+new_passenger = pd.DataFrame({
+    "Clump Thickness": [5],
+    "Uniformity of Cell Size": [3],
+    "Uniformity of Cell Shape": [3],
+    "Marginal Adhesion": [1],
+    "Single Epithelial Cell Size": [2],
+    "Bare Nuclei": [1],
+    "Bland Chromatin": [3],
+    "Normal Nucleoli": [1],
+    "Mitoses": [1]
+})
+
+# Make prediction
+prediction = model.predict(new_passenger)
+probability = model.predict_proba(new_passenger)
+
+print("Prediction:", prediction)
+print("Probability of Benign (Class 2):", probability[0][0])
+print("Probability of Malignant (Class 4):", probability[0][1])
+
+if prediction[0] == 1:
+    print("The model predicts: SURVIVED")
+else:
+    print("The model predicts: DID NOT SURVIVE")
+
+coefficients = pd.DataFrame({
+    "Feature": features,
+    "Coefficient": model.coef_[0]
+})
+
+print(coefficients)
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+
+# Initialize the Decision Tree model
+# We set max_depth=3 to prevent overfitting and make it easily interpretable
+dt_model = DecisionTreeClassifier(max_depth=3, random_state=42)
+
+# Train the model
+dt_model.fit(X_train, y_train)
+
+# Make predictions
+dt_y_pred = dt_model.predict(X_test)
+
+# Evaluate the model
+print("Decision Tree Accuracy:", accuracy_score(y_test, dt_y_pred))
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, dt_y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, dt_y_pred))
+
+import matplotlib.pyplot as plt
+from sklearn.tree import plot_tree
+
+plt.figure(figsize=(20,10))
+plot_tree(
+    dt_model,
+    feature_names=features,
+    class_names=['Benign (2)', 'Malignant (4)'],
+    filled=True,
+    rounded=True
+)
+plt.show()
+
+Part 1-
+
+  breast_cancer.csv
+  https://www.kaggle.com/code/chanchal24/ breast-cancer-dataset$
+  683
+  10
+  This dataset contains information about tumors, breast cells, uniformity of cell size, clump thickness, etc.
+  Whether the tumor is benign or malignant.
+
+Part 2-
+  
+  1. Each row represents one breast tumor sample, and its characteristics
+  2. Clump Thickness
+     Uniformity of Cell Size
+     Uniformity of Cell Shape
+     Marginal Adhesion
+     Single Epithelial Cell Size
+     Bare Nuclei
+     Bland Chromatin
+     Normal Nucleoli
+     Mitoses
+     Class
+  3. All of the columns are useful because they all add information for the AI to determine if the tumor is active or not
+  4. Class
+  5. Benign - 458
+     Malignant - 241
+  6. Bare Nuclei
+  7. The ID column
+
+Part 3-
+
+  Features:
+  Clump Thickness
+  Uniformity of Cell Size
+  Uniformity of Cell Shape
+  Marginal Adhesion
+  Single Epithelial Cell Size
+  Bare Nuclei
+  Bland Chromatin
+  Normal Nucleoli
+  Mitoses
+
+  Target:
+  Class
+
+  I chose these features because they all help differentiate benign tumors from malignant tumors.
+
+Part 4-
+
+  Loaded the csv file, chose the 9 cells as my features, and the class column as my target. I then checked for any missing values, like in the Bare Nuclei column.
+
+Part 5-
+
+  We should keep testing data separate from training because it shows the model what patterns it needs to recognize.
+
+Part 6-
+
+  Decision tree is a a flowchart model that organizes information and shows the relationship between them. It's appropriate for my problem because it shows the connection between cell characteristics and tumor classifications.
+
+Part 7-
+
+  Accuracy:
+  95.62043795620438 %
+
+
+  Confusion Matrix:
+  TP - Malignant tumors predicted as itself
+  TN - Benign tumors predicted as itself
+  FP - Benign tumors incorrectly predicted as malignant
+  FN - Malignant tumors incorrectly predicted as benign
+
+  Precision:
+  2       0.92                   
+  4       0.94                
+
+  Recall:
+  2       0.96
+  4       0.88
+
+  F-1 Score:
+  2       0.94
+  4       0.91
+
+  Recall is the most important because finding any false negatives will make sure the model is correct, and not written wrongly.
+
+Part 8-
+Part 9-
+
+  1. It predicted whether tumors were benign or malignant.
+  2.
+  3. AI models can make mistakes in predictions, such as how many were predicted correctly, and which ones were confused.
+  4. The model has limited depth, and that the model depends on the quality of data meaning any missing values, etc. effects the performance.
+  5. Test different depths, and compare with different models.
